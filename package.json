@@ -1,0 +1,19 @@
+{
+  "name": "gd-save",
+  "version": "1.0.0",
+  "description": "A program for sharing GD levels.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "test <test@example.com>",
+  "license": "ISC",
+  "homepage": "https://github.com/Gabe616/GDSave",
+  "bugsUrl": "https://github.com/Gabe616/GDSave/issues",
+  "repositoryType": "git",
+  "repositoryUrl": "https://github.com/Gabe616/GDSave.git",
+  "devDependencies": {
+    "electron": "19.0.0-beta.4"
+  }
+}
