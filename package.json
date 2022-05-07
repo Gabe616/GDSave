@@ -1,11 +1,11 @@
 {
   "name": "gd-save",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "A program for sharing GD levels.",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "builder.bat"
+    "build": "builder.bat && node builder"
   },
   "keywords": [],
   "author": "GitHub - Gabe616",
