@@ -12,6 +12,7 @@ let xor = (str, key) => {
 };
 
 let obj = {};
+obj.quickopen = async () => await ipcRenderer.invoke("qopen");
 obj.dialog = {};
 obj.dialog.saveFile = async (a) => ipcRenderer.invoke("dialog", "save", a);
 obj.LOCALAPPDATA = process.env.LOCALAPPDATA;

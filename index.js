@@ -1,15 +1,11 @@
-const {
-  BrowserWindow,
-  app,
-  dialog,
-  ipcMain,
-  ipcRenderer,
-} = require("electron");
+const { BrowserWindow, app, dialog, ipcMain } = require("electron");
 
 app.whenReady().then(() => {
+  let open = process.argv.filter((x) => x.endsWith(".gdsave"))[0];
+
   const win = new BrowserWindow({
-    width: 900,
-    height: 750,
+    width: !open ? 900 : 800,
+    height: !open ? 750 : 560,
     resizable: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -19,6 +15,12 @@ app.whenReady().then(() => {
     },
     icon: __dirname + "/src/icon/icon.ico",
     title: "GD Save",
+  });
+
+  win.webContents.on("before-input-event", (event, input) => {
+    if (input.control && input.key.toLowerCase() === "r") {
+      if (open) event.preventDefault();
+    }
   });
 
   let yes = true;
@@ -32,6 +34,8 @@ app.whenReady().then(() => {
     let xd = await dialog[F](win, a);
     return xd;
   });
+
+  ipcMain.handle("qopen", () => open);
 
   win.on("closed", () => {
     yes = false;

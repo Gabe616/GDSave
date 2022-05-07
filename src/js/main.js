@@ -1,5 +1,7 @@
-const { dialog, LOCALAPPDATA, fs, decode, encode } = window.electronAPI;
+const { dialog, LOCALAPPDATA, fs, decode, encode, quickopen } =
+  window.electronAPI;
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
+let qopen;
 
 let btn = document.getElementById("switch");
 let input = document.getElementById("input");
@@ -57,39 +59,41 @@ let uload = async (img, txt) => {
   await wait(50);
 };
 
-const inpFile = async (fl) => {
+const inppFile = async (fl) => {
   if (fl.name.endsWith(".gdsave")) {
     if (!gdexists) return await uload("error", gdexistserr);
 
     await uload("load", `Reading ${fl.name}...`);
-
     let reader = new FileReader();
     reader.onload = async (txt) => {
-      await uload("load", "Decoding...");
-      let dtxt = decode(txt.target.result, 11);
-      if (!dtxt) return await uload("error", "File is corrupt!");
-
-      await uload("load", "Decoding levels...");
-
-      let svs = getLevels();
-      if (!svs) return await uload("error", "File is corrupt!");
-
-      await uload("load", "Adding level...");
-
-      let dt = svs.split("<k>_isArr</k><t />");
-      dt[1] = dt[1].replace(
-        /<k>k_([0-9]+)<\/k><d><k>kCEK<\/k>/g,
-        (n) =>
-          `<k>k_${parseInt(n.slice(5).split("<")[0]) + 1}</k><d><k>kCEK</k>`
-      );
-      dt = `${dt[0]}<k>_isArr</k><t /><k>k_0</k><d>${dtxt}</d>${dt[1]}`;
-
-      fs.writeFileSync(gdexists, encode(dt));
-
-      await uload("success", "Saved!");
+      inpFile(txt.target.result);
     };
     reader.readAsText(fl);
   }
+};
+
+const inpFile = async (txt) => {
+  await uload("load", "Decoding...");
+  let dtxt = decode(txt, 11);
+  if (!dtxt) return await uload("error", "File is corrupt!");
+
+  await uload("load", "Decoding levels...");
+
+  let svs = getLevels();
+  if (!svs) return await uload("error", "File is corrupt!");
+
+  await uload("load", "Adding level...");
+
+  let dt = svs.split("<k>_isArr</k><t />");
+  dt[1] = dt[1].replace(
+    /<k>k_([0-9]+)<\/k><d><k>kCEK<\/k>/g,
+    (n) => `<k>k_${parseInt(n.slice(5).split("<")[0]) + 1}</k><d><k>kCEK</k>`
+  );
+  dt = `${dt[0]}<k>_isArr</k><t /><k>k_0</k><d>${dtxt}</d>${dt[1]}`;
+
+  fs.writeFileSync(gdexists, encode(dt));
+
+  await uload("success", "Saved!");
 };
 
 let olist = [];
@@ -125,6 +129,8 @@ let yes = false;
 
 btn.addEventListener("click", () => {
   if (checking) return;
+  if (qopen) return window.close();
+
   load.style.display = "none";
   yes = !yes;
   input.style.display = yes ? "none" : "flex";
@@ -183,15 +189,22 @@ f.addEventListener("drop", (e) => {
 
   let fl = e.dataTransfer.files[0];
   if (fl) {
-    inpFile(fl);
+    inppFile(fl);
   }
 });
 fnp.addEventListener("change", (e) => {
   let fl = fnp.files[0];
   fnp.value = "";
   if (fl) {
-    inpFile(fl);
+    inppFile(fl);
   }
 });
 
 if (!gdexists) uload("error", gdexistserr);
+
+(async () => {
+  qopen = await quickopen();
+  if (qopen) {
+    inpFile(fs.readFileSync(qopen, "utf8"));
+  }
+})();
