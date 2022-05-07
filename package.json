@@ -4,17 +4,21 @@
   "description": "A program for sharing GD levels.",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "builder.bat"
   },
   "keywords": [],
-  "author": "test <test@example.com>",
+  "author": "GitHub - Gabe616",
   "license": "ISC",
   "homepage": "https://github.com/Gabe616/GDSave",
   "bugsUrl": "https://github.com/Gabe616/GDSave/issues",
   "repositoryType": "git",
   "repositoryUrl": "https://github.com/Gabe616/GDSave.git",
   "devDependencies": {
-    "electron": "19.0.0-beta.4"
+    "electron": "^18.2.0",
+    "electron-packager": "^15.5.1",
+    "electron-wix-msi": "^4.0.0",
+    "exe-icon-extractor": "^1.0.8"
   },
   "dependencies": {
     "zlib": "^1.0.5"
