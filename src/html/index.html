@@ -6,19 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styles.css">
+
+    <link rel="preload" as="image" href="../img/exMark_001.png">
+    <link rel="preload" as="image" href="../img/GJ_completesIcon_001.png">
+
     <title>GD Save</title>
 </head>
 
 <body>
     <div id="input">
         <h1>Drag and drop or select a .GDSAVE file</h1>
-        <form action="#" method="post">
-            <input type="file" name="file" accept=".gdsave" id="infile">
-            <button type="submit" hidden>sub</button>
-        </form>
+        <div id="fsl">
+            <label for="finp" id="fsll">Drag/select file here!</label>
+            <input type="file" name="file" accept=".gdsave" id="finp">
+        </div>
     </div>
     <div id="output" style="display: none">
         <h1>Click on the button below to fetch your GD files</h1>
+    </div>
+    <div id="loading" style="display: none">
+        <img src="../img/loading.png" alt="">
+        <h2>petting a dog...</h2>
     </div>
 
     <img src="../img/GJ_replayBtn_001.png" alt="replay" id="switch" class="button" />
@@ -33,4 +41,6 @@
 </body>
 
 </html>
+<script src="../js/base64.js"></script>
+<script src="../js/pako.js"></script>
 <script src="../js/main.js"></script>
